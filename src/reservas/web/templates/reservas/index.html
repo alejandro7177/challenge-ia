@@ -1,0 +1,33 @@
+{% extends 'reservas/base.html' %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm border">
+    <div class="container-fluid py-3">
+        <h1 class="display-5 fw-bold text-primary">Sistema de Reservas de Laboratorio</h1>
+        <p class="col-md-8 fs-4 text-secondary">Consulta la disponibilidad, realiza reservas y gestiona el equipamiento de laboratorio de forma rápida y segura.</p>
+        <hr class="my-4">
+        <div class="d-flex gap-3">
+            <a class="btn btn-primary btn-lg" href="{% url 'reserve' %}" role="button">Nueva Reserva</a>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url 'reservation_list' %}" role="button">Ver Historial</a>
+        </div>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for item in inventory %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <span class="badge bg-secondary mb-2">{{ item.id }}</span>
+                <h5 class="card-title">{{ item.name }}</h5>
+                <p class="card-text text-muted">Unidad física de equipamiento disponible para reserva en el laboratorio.</p>
+            </div>
+            <div class="card-footer bg-transparent border-top-0">
+                <a href="{% url 'reserve' %}?unit={{ item.id }}" class="btn btn-sm btn-outline-primary">Reservar</a>
+                <a href="{% url 'availability' %}?unit_id={{ item.id }}" class="btn btn-sm btn-outline-secondary">Ver Disponibilidad</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

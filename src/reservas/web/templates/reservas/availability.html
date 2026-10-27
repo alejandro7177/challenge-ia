@@ -1,0 +1,61 @@
+{% extends 'reservas/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">Consultar Disponibilidad</h4>
+            </div>
+            <div class="card-body">
+                <form method="get" class="needs-validation">
+                    <div class="mb-3">
+                        <label for="unit_id" class="form-label">Unidad de Equipo</label>
+                        <select name="unit_id" id="unit_id" class="form-select" required>
+                            <option value="">Seleccione una unidad...</option>
+                            {% for item in inventory %}
+                            <option value="{{ item.id }}" {% if checked_data.unit_id == item.id %}selected{% endif %}>
+                                {{ item.id }} - {{ item.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="start" class="form-label">Fecha y Hora de Inicio</label>
+                        <input type="datetime-local" name="start" id="start" class="form-control" value="{{ checked_data.start }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end" class="form-label">Fecha y Hora de Fin</label>
+                        <input type="datetime-local" name="end" id="end" class="form-control" value="{{ checked_data.end }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Verificar Disponibilidad</button>
+                </form>
+
+                {% if result %}
+                <hr class="my-4">
+                <div class="mt-3">
+                    {% if result.success %}
+                        {% if result.is_free %}
+                            <div class="alert alert-success text-center fs-5">
+                                ✅ El equipo <strong>{{ checked_data.unit_id }}</strong> está <strong>DISPONIBLE</strong> en el intervalo solicitado.
+                                <div class="mt-2">
+                                    <a href="{% url 'reserve' %}?unit={{ checked_data.unit_id }}&start={{ checked_data.start }}&end={{ checked_data.end }}" class="btn btn-success btn-sm">Reservar ahora</a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-danger text-center fs-5">
+                                ❌ El equipo <strong>{{ checked_data.unit_id }}</strong> está <strong>OCUPADO</strong> en el intervalo solicitado.
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning text-center">
+                            ⚠️ Error en la validación: {{ result.error }}
+                        </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

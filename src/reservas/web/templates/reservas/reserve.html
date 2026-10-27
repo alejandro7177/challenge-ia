@@ -1,0 +1,42 @@
+{% extends 'reservas/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Crear Nueva Reserva</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="unit_id" class="form-label">Unidad de Equipo</label>
+                        <select name="unit_id" id="unit_id" class="form-select" required>
+                            <option value="">Seleccione una unidad...</option>
+                            {% for item in inventory %}
+                            <option value="{{ item.id }}" {% if request.GET.unit == item.id %}selected{% endif %}>
+                                {{ item.id }} - {{ item.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="requester" class="form-label">Solicitante</label>
+                        <input type="text" name="requester" id="requester" class="form-control" placeholder="Nombre y Apellido" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="start" class="form-label">Fecha y Hora de Inicio</label>
+                        <input type="datetime-local" name="start" id="start" class="form-control" value="{{ request.GET.start }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end" class="form-label">Fecha y Hora de Fin</label>
+                        <input type="datetime-local" name="end" id="end" class="form-control" value="{{ request.GET.end }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Confirmar Reserva</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

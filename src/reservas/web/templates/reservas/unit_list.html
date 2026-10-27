@@ -1,0 +1,34 @@
+{% extends 'reservas/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Equipos del Laboratorio</h2>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Equipo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in inventory %}
+                        <tr>
+                            <td><span class="badge bg-primary">{{ item.id }}</span></td>
+                            <td class="fw-bold">{{ item.name }}</td>
+                            <td>
+                                <a href="{% url 'reserve' %}?unit={{ item.id }}" class="btn btn-sm btn-primary">Reservar</a>
+                                <a href="{% url 'availability' %}?unit_id={{ item.id }}" class="btn btn-sm btn-outline-secondary">Disponibilidad</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
