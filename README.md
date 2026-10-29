@@ -55,12 +55,18 @@ PYTHONPATH=src python -m reservas list [--unit ID] [--status active|cancelled]
 PYTHONPATH=src ./venv/bin/python -m unittest discover -s tests -v
 ```
 
-## 3. Preparación del Agente
+## 3. Preparación del Agente y Delegación
 
-- Entorno Python 3.11+ con Django.
-- Reglas estrictas de superposición semiabierta (`[start, end)`).
-- Persistencia SQLite inmutable excepto mediante el comando explícito `init`.
-- Pruebas unitarias completas cubriendo validaciones, solapamientos, turnos consecutivos, cancelación, persistencia y vistas web Django.
+El desarrollo y evolución de esta aplicación fueron realizados por el agente interactivo **opencode** (codex runner) impulsado por el modelo **`google/gemini-3.5-flash`** (versión free).
+
+### Matriz de Herramientas, Skills y Delegaciones por Etapa
+
+| Etapa / Delegación | Objetivo y Alcance | Herramientas / Skills Utilizadas | Agente / Modelo | Resultado y Verificación |
+| :--- | :--- | :--- | :--- | :--- |
+| **EP-1: Modelos y Validaciones** | Definir excepciones de dominio, estructura de datos `Reservation` y funciones de validación de entrada (`validation.py`). | `read`, `write`, `glob`, `unittest` | `opencode` (`gemini-3.5-flash free`) | Pruebas unitarias completas para formatos de fecha, solicitantes y duraciones máximas (`test_validation.py`). |
+| **EP-2: Lógica de Negocio y Persistencia** | Implementar `storage.py` (SQLite) y `service.py` con algoritmo único de detección de superposiciones `[start, end)`. | `read`, `write`, `edit`, `bash`, `unittest` | `opencode` (`gemini-3.5-flash free`) | Coincidencia exacta de validación entre disponibilidad y reserva; soporte de turnos consecutivos. |
+| **EP-3: Interfaz CLI y Documentación** | Crear la CLI (`cli.py`), verificar persistencia tras reinicio y estructurar la documentación del proyecto. | `read`, `write`, `edit`, `bash`, `todowrite` | `opencode` (`gemini-3.5-flash free`) | Comandos CLI probados e intachables. Tests de persistencia con SQLite en archivos temporales (`test_persistence.py`). |
+| **EP-4: Integración Web con Django** | Transformar el proyecto en una aplicación web completa con Django reutilizando la lógica de negocio subyacente. | `read`, `write`, `edit`, `bash`, `todowrite`, `orchestration` | `opencode` (`gemini-3.5-flash free`) | Aplicación Django en `src/reservas/web/` con plantillas Bootstrap y 21/21 tests pasando (`test_django_web.py`). |
 
 ## 4. Decisiones y Delegación
 
@@ -70,4 +76,4 @@ PYTHONPATH=src ./venv/bin/python -m unittest discover -s tests -v
   - Formato estricto `YYYY-MM-DDTHH:MM`.
   - Zona horaria local `America/Argentina/Buenos_Aires` (interpretada como *naive* datetimes).
   - Reloj inyectable en las funciones de servicio para garantizar pruebas deterministas.
-- **Delegación y progreso:** Registrado detalladamente en `docs/PROGRESS.md` y `docs/delegation/`.
+- **Delegación y progreso:** Registrado detalladamente en `docs/PROGRESS.md` y en los episodios `docs/delegation/EP-1.md` al `EP-4.md`.
