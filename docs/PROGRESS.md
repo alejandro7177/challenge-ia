@@ -13,3 +13,10 @@
 - Comando ejecutado y resultado real: `PYTHONPATH=src python -m unittest discover -s tests -v` -> 17 tests OK.
 - Decisión humana (aceptar/corregir/rechazar) y motivo: Aceptado.
 - Commit: Pendiente.
+
+## 2026-10-29 — Integración de Interfaz Web con Django
+- Objetivo/requisito: Transformar el proyecto para incluir una interfaz web en Django manteniendo la lógica de negocio, reglas de validación y almacenamiento unificados.
+- Qué hizo el agente: Creación de la aplicación web Django en `src/reservas/web/` (`settings.py`, `urls.py`, `views.py`, templates Bootstrap HTML y suite de pruebas `test_django_web.py`).
+- Comando ejecutado y resultado real: `PYTHONPATH=src ./venv/bin/python -m unittest discover -s tests -v` -> 21 tests OK.
+- Decisión humana (aceptar/corregir/rechazar) y motivo: Aceptado por el usuario.
+- Commit: Pendiente.

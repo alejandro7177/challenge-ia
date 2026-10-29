@@ -38,8 +38,8 @@ class DjangoWebTestCase(TestCase):
         self.assertContains(response, "DISPONIBLE")
 
     def test_reserve_and_cancel_flow(self):
-        future_start = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%dT10:00")
-        future_end = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%dT11:00")
+        future_start = (datetime.now() + timedelta(days=20)).strftime("%Y-%m-%dT10:00")
+        future_end = (datetime.now() + timedelta(days=20)).strftime("%Y-%m-%dT11:00")
         
         response = self.client.post(reverse('reserve'), {
             'unit_id': 'MIC-01',
@@ -54,7 +54,7 @@ class DjangoWebTestCase(TestCase):
         self.assertContains(response, "María Pérez")
 
         reservas = self.storage.get_reservations(unit_id="MIC-01")
-        res_id = reservas[0].id
+        res_id = reservas[-1].id
 
         response = self.client.post(reverse('cancel_reservation', args=[res_id]))
         self.assertEqual(response.status_code, 302)
